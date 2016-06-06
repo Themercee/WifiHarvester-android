@@ -16,7 +16,7 @@ The application is used to log the Wifi you get when you walk.
 
 5. Import the data with the desktop app to visualize them (desktop app coming soon on github).
 
-<img src="gui.png" title="WifiHarvester - GUI" width="50%">
+<img src="gui.png" title="WifiHarvester - GUI" width="300px">
 
 ## TODO
 - Add a scrolling list to see Wifi with their infos
