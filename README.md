@@ -5,6 +5,7 @@ In development, images coming soon.
 
 ## How to use it
 The application is used to log the Wifi you get when you walk.
+
 1. Start the app and click on the info button (third one) to see if you get GPS position
 
 2. When GPS position is ok, walk around the building or place you want to log the Wifi signal
