@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  Single List Item Design -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:layout_marginLeft="4dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="5dip"
+        android:src="@mipmap/ic_ok_green" >
+    </ImageView>
+
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/label"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="10dip"
+        android:textSize="16dip"
+        android:textStyle="bold" >
+    </TextView>
+
+</LinearLayout>

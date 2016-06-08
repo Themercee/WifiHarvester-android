@@ -10,7 +10,9 @@ import android.support.v7.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -18,9 +20,12 @@ import com.cosig.wifiharvester.clickListener.WifiInfoOnClickListener;
 import com.cosig.wifiharvester.clickListener.WifiStartOnClickListener;
 import com.cosig.wifiharvester.clickListener.WifiStopOnClickListener;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
     private Debug debug;
+    private ArrayList<WifiData> wifiArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,25 +35,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         debug = Debug.getDebug(this.getApplicationContext());
+
         initOnClickListener();  //Init Start Stop Info button
+        initSwitchVib();
 
-        Switch switchVib = (Switch) findViewById(R.id.switchCanVibrate);
+        wifiArray = new ArrayList<WifiData>();
+        wifiArray.add(new WifiData("ssid","bssid","WEP"));
+        wifiArray.add(new WifiData("ssid2","bssid2","WPA"));
 
-        if(switchVib == null){
-            debug.log("MainActivity", "SwitchVib == null!! Can't vibrate");
-        }
+        ArrayAdapterWifi adapter = new ArrayAdapterWifi(this, wifiArray);
+        ListView listView = (ListView) findViewById(R.id.wifi_list);
+        listView.setAdapter(adapter);
 
-        switchVib.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    debug.vibrate();
-                    debug.setCanVibrate(true);
-                } else {
-                    debug.vibrate();
-                    debug.setCanVibrate(false);
-                }
-            }
-        });
 
 
     }
@@ -110,6 +108,25 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton info = (FloatingActionButton) findViewById(R.id.info);
         info.setOnClickListener(infoListener);
+    }
+
+    private void initSwitchVib(){
+        Switch switchVib = (Switch) findViewById(R.id.switchCanVibrate);
+        if(switchVib == null){
+            debug.log("MainActivity", "SwitchVib == null!! Can't vibrate");
+        }
+
+        switchVib.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    debug.vibrate();
+                    debug.setCanVibrate(true);
+                } else {
+                    debug.vibrate();
+                    debug.setCanVibrate(false);
+                }
+            }
+        });
     }
 
 

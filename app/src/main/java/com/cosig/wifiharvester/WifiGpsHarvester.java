@@ -3,11 +3,13 @@ package com.cosig.wifiharvester;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.location.LocationProvider;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -25,9 +27,6 @@ public class WifiGpsHarvester {
 
     private  boolean continueScanning;
 
-    private double lat;
-    private double lon;
-
     private Debug debug;
 
     private WifiManager.WifiLock wifiLock;
@@ -42,8 +41,6 @@ public class WifiGpsHarvester {
         this.debug = Debug.getDebug(this.context);
 
         this.newGpsUpdate = true;
-        this.lat = 0.0;
-        this.lon = 0.0;
 
         this.continueScanning = false;
     }
@@ -102,8 +99,6 @@ public class WifiGpsHarvester {
 
 
     public void addNewGpsCoord(double lat, double lon){
-        this.lat = lat;
-        this.lon = lon;
         this.newGpsUpdate = true;
         updateLatLon(lat,lon);
     }
@@ -172,5 +167,13 @@ public class WifiGpsHarvester {
 
     public boolean getContinueScanning(){
         return this.continueScanning;
+    }
+
+    /**
+     *
+     * @param wifiList The list of SSID to add to the list (if they are not already saved)
+     */
+    public void addWifiToList(List<ScanResult> wifiList){
+
     }
 }

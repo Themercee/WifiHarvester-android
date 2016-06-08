@@ -96,8 +96,17 @@
         android:text="Vibration"
         android:id="@+id/switchCanVibrate"
         android:checked="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_below="@+id/textViewLon"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+    
+    <ListView
+        android:id="@+id/wifi_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/switchCanVibrate"
+
+        ></ListView>
 </RelativeLayout>
