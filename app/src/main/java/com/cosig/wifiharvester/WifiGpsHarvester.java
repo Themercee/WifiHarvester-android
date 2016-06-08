@@ -109,22 +109,27 @@ public class WifiGpsHarvester {
         mainActivity.updateWifi(wifiDataArrayList);
     }
 
+    public void updateLatLon(Position position){
+        mainActivity.updateLatLon(Double.toString(position.lat),Double.toString(position.lon));
+    }
+
     public void addNewGpsCoord(double lat, double lon){
         this.newGpsUpdate = true;
         updateLatLon(lat,lon);
     }
 
-    public String getGPSRecording(){
+    public Position getGPSRecording(){
         debug.log("WifiGpsHarvester", "In getGPSRecording");
         LocationService locationService = LocationService.getLocationManager(context, this);
+        Position result = new Position(0.0,0.0);
 
-        String coord = "";
         if(this.newGpsUpdate){
-            coord += ", \"Lat\": " + Double.toString(locationService.latitude) + ", \"Lon\": " + Double.toString(locationService.longitude);
+            result.lat = locationService.latitude;
+            result.lon = locationService.longitude;
             this.newGpsUpdate = false;
-            debug.log("WifiGpsHarvester", "In getGPSRecording...add coord: " + coord);
+            debug.log("WifiGpsHarvester", "In getGPSRecording...add coord: " + Double.toString(result.lat) + ", " + Double.toString(result.lon));
         }
-        return coord;
+        return result;
     }
 
     public void Debug(){
@@ -180,11 +185,4 @@ public class WifiGpsHarvester {
         return this.continueScanning;
     }
 
-    /**
-     *
-     * @param wifiList The list of SSID to add to the list (if they are not already saved)
-     */
-    public void addWifiToList(List<ScanResult> wifiList){
-
-    }
 }

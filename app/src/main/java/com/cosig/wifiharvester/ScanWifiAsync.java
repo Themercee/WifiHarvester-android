@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Jimmy on 2016-05-30.
  */
-public class ScanWifiAsync  extends AsyncTask<String,List<ScanResult>, Integer>{
+public class ScanWifiAsync  extends AsyncTask<String,WifiGPSAsyncContainer, Integer>{
     private WifiManager wifiManager;
     private  WifiGpsHarvester wgh;
     private  List<ScanResult> wifiList;
@@ -33,15 +33,19 @@ public class ScanWifiAsync  extends AsyncTask<String,List<ScanResult>, Integer>{
             }catch (InterruptedException e){
                 Thread.interrupted();
             }
-            String coor = wgh.getGPSRecording();
+
+            Position position = wgh.getGPSRecording();
+
+            String coord = "";
+            coord += ", \"Lat\": " + Double.toString(position.lat) + ", \"Lon\": " + Double.toString(position.lon);
 
             // Level of a Scan Result
             wifiList = wifiManager.getScanResults();
-            publishProgress(wifiList);
+            publishProgress(new WifiGPSAsyncContainer(wifiList, position));
 
             for (ScanResult scanResult : wifiList) {
                 int level = WifiManager.calculateSignalLevel(scanResult.level, 5);
-                wgh.addWifiEntry("{ \"BSSID\":\"" + scanResult.BSSID + "\", \"SSID\": \"" + scanResult.SSID + "\", \"Signal\":" + level + coor + "}");
+                wgh.addWifiEntry("{ \"BSSID\":\"" + scanResult.BSSID + "\", \"SSID\": \"" + scanResult.SSID + "\", \"Signal\":" + level + coord + "}");
             }
         }
 
@@ -49,9 +53,18 @@ public class ScanWifiAsync  extends AsyncTask<String,List<ScanResult>, Integer>{
     }
 
     @Override
-    protected  void onProgressUpdate (List<ScanResult>... wifi){
-        if(wifi != null && wifi.length > 0){
-            wgh.updateListWifi(wifi[0]);
+    protected  void onProgressUpdate (WifiGPSAsyncContainer... wifiGPSAsyncContainers){
+        List<ScanResult> wifi = wifiGPSAsyncContainers[0].wifiList;
+        Position position = wifiGPSAsyncContainers[0].position;
+
+        // Update ListView Wifi
+        if(wifi != null && wifi.size() > 0){
+            wgh.updateListWifi(wifi);
+        }
+
+        //Update position
+        if(position.lat != -1 && position.lon != -1){
+            wgh.updateLatLon(position);
         }
     }
 }

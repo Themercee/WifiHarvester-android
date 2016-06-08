@@ -22,6 +22,7 @@ public class WifiStartOnClickListener implements View.OnClickListener {
         //turn on the indicator
         FloatingActionButton startButton = (FloatingActionButton) v;
         startButton.setRippleColor(Color.WHITE);
+        startButton.setImageResource(android.support.design.R.drawable.abc_ic_search_api_mtrl_alpha);
         this.wgh.startWifiRecording();
     }
 }
