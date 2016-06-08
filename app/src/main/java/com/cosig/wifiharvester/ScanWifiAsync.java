@@ -39,8 +39,9 @@ public class ScanWifiAsync  extends AsyncTask<String,WifiGPSAsyncContainer, Inte
             String coord = "";
             coord += ", \"Lat\": " + Double.toString(position.lat) + ", \"Lon\": " + Double.toString(position.lon);
 
-            // Level of a Scan Result
             wifiList = wifiManager.getScanResults();
+
+            // Update UI
             publishProgress(new WifiGPSAsyncContainer(wifiList, position));
 
             for (ScanResult scanResult : wifiList) {
