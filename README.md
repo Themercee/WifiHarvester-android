@@ -19,5 +19,7 @@ The application is used to log the Wifi you get when you walk.
 <img src="gui.png" title="WifiHarvester - GUI" width="300px">
 
 ## TODO
+- Change the play button icon when pressed
 - Add a scrolling list to see Wifi with their infos
 - Add some unit test
+- Add facultative DEBUG option

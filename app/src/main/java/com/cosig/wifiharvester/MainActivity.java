@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private Debug debug;
     private ArrayList<WifiData> wifiArray;
+    private ArrayAdapterWifi adapterListWifi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         initOnClickListener();  //Init Start Stop Info button
         initSwitchVib();
-
-        wifiArray = new ArrayList<WifiData>();
-        wifiArray.add(new WifiData("ssid","bssid","WEP"));
-        wifiArray.add(new WifiData("ssid2","bssid2","WPA"));
-
-        ArrayAdapterWifi adapter = new ArrayAdapterWifi(this, wifiArray);
-        ListView listView = (ListView) findViewById(R.id.wifi_list);
-        listView.setAdapter(adapter);
-
-
-
+        initLisWifi();
     }
 
     @Override
@@ -71,6 +61,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateWifi(ArrayList<WifiData> wifiDataArrayList){
+        // Verify if wifi is already there
+        ArrayList<WifiData> wifiToAdd = new ArrayList<>();
+
+        for(int i = 0; i < wifiDataArrayList.size();i++){
+            WifiData newWifi = wifiDataArrayList.get(i);
+            boolean isFound = false;
+
+            for(int j = 0; j < wifiArray.size(); j++){
+                WifiData oldWifi = wifiArray.get(j);
+
+                if(newWifi.isEqualTo(oldWifi)){
+                    isFound = true;
+                }
+            }
+
+            if(!isFound) wifiToAdd.add(newWifi);
+        }
+
+        adapterListWifi.clear();
+        adapterListWifi.addAll(wifiToAdd);
+        adapterListWifi.notifyDataSetChanged();
     }
 
     public void updateGpsState(String state){
@@ -127,6 +141,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void initLisWifi(){
+        wifiArray = new ArrayList<WifiData>();
+
+        adapterListWifi = new ArrayAdapterWifi(this, wifiArray);
+        ListView listView = (ListView) findViewById(R.id.wifi_list);
+        listView.setAdapter(adapterListWifi);
     }
 
 

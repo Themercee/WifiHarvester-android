@@ -35,7 +35,7 @@ public class ArrayAdapterWifi extends ArrayAdapter<WifiData> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
         textView.setText(wifiData.getSSID());
-        imageView.setImageResource(R.mipmap.ic_ok_green);
+        imageView.setImageResource(R.drawable.ic_ok_green);
 
         // Change the icon for Windows and iPhone
         String s = "";

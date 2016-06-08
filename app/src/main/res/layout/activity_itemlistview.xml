@@ -11,7 +11,7 @@
         android:layout_marginLeft="4dip"
         android:layout_marginRight="10dip"
         android:layout_marginTop="5dip"
-        android:src="@mipmap/ic_ok_green" >
+         >
     </ImageView>
 
 

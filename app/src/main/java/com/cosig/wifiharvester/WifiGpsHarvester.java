@@ -9,6 +9,7 @@ import android.os.Environment;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,7 +57,6 @@ public class WifiGpsHarvester {
             return ;
         }
 
-
         this.wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_SCAN_ONLY, "");
         wifiLock.acquire();
 
@@ -97,6 +97,17 @@ public class WifiGpsHarvester {
         }
     }
 
+    public void updateListWifi(List<ScanResult> wifiList){
+
+        ArrayList<WifiData> wifiDataArrayList = new ArrayList<>();
+        WifiDataFactory wifiDataFactory = new WifiDataFactory();
+
+        for(ScanResult wifi : wifiList){
+            wifiDataArrayList.add(wifiDataFactory.createWifiData(wifi.SSID, wifi.BSSID, wifi.capabilities));
+        }
+
+        mainActivity.updateWifi(wifiDataArrayList);
+    }
 
     public void addNewGpsCoord(double lat, double lon){
         this.newGpsUpdate = true;

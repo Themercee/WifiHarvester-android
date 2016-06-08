@@ -15,7 +15,7 @@ public class WifiData {
     }
 
     public String getSecurity() {
-        return security;
+        return this.security;
     }
 
     public void setSecurity(String security) {
@@ -31,11 +31,22 @@ public class WifiData {
     }
 
     public String getBSSID() {
-        return BSSID;
+        return this.BSSID;
     }
 
     public void setBSSID(String BSSID) {
         this.BSSID = BSSID;
+    }
+
+    public boolean isEqualTo(WifiData otherWifiData){
+        boolean isEqual = false;
+
+        if(this.getBSSID() == otherWifiData.getBSSID() &&
+                this.getSSID() == otherWifiData.getSSID()){
+            isEqual = true;
+        }
+
+        return isEqual;
     }
 
 
