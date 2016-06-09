@@ -10,10 +10,13 @@ import android.support.v7.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cosig.wifiharvester.clickListener.WifiInfoOnClickListener;
 import com.cosig.wifiharvester.clickListener.WifiStartOnClickListener;
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         initOnClickListener();  //Init Start Stop Info button
         initSwitchVib();
-        initLisWifi();
+        initWifiList();
     }
 
     @Override
@@ -143,12 +146,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initLisWifi(){
+    private void initWifiList(){
         wifiArray = new ArrayList<WifiData>();
 
         adapterListWifi = new ArrayAdapterWifi(this, wifiArray);
-        ListView listView = (ListView) findViewById(R.id.wifi_list);
+        final ListView listView = (ListView) findViewById(R.id.wifi_list);
         listView.setAdapter(adapterListWifi);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                WifiData wifiData = (WifiData) parent.getAdapter().getItem(position);
+                String message = wifiData.getSSID() + "\n" + wifiData.getBSSID() + "\n" + wifiData.getSecurity();
+                Popup popup = new Popup(message);
+                popup.show(getFragmentManager(),"");
+            }
+        });
+
+
     }
 
 

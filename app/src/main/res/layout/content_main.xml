@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewLatEdit"
-        android:layout_below="@+id/textViewProvider"
+        android:layout_alignTop="@+id/textViewLat"
         android:layout_toRightOf="@+id/textViewLat"
         android:layout_toEndOf="@+id/textViewLat" />
 
@@ -87,8 +87,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewLonEdit"
         android:layout_alignTop="@+id/textViewLon"
-        android:layout_toRightOf="@+id/textViewLatEdit"
-        android:layout_toEndOf="@+id/textViewLatEdit" />
+        android:layout_toRightOf="@+id/textViewLon"
+        android:layout_toEndOf="@+id/textViewLon" />
 
     <Switch
         android:layout_width="wrap_content"
