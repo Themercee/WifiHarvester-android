@@ -29,8 +29,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text=""
         android:id="@+id/textViewGpsStatusEdit"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toRightOf="@+id/textViewGpsStatus"
+        android:layout_toEndOf="@+id/textViewGpsStatus" />
 
     <TextView
         android:layout_width="wrap_content"

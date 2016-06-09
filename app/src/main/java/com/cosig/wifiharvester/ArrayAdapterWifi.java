@@ -35,12 +35,29 @@ public class ArrayAdapterWifi extends ArrayAdapter<WifiData> {
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
         textView.setText(wifiData.getSSID() + " | " + wifiData.getSecurity());
-        imageView.setImageResource(R.drawable.ic_ok_green);
 
-        // Change the icon for Windows and iPhone
-        String s = "";
+        setSecurityIcon(imageView, wifiData);
 
         return rowView;
+    }
+
+    private void setSecurityIcon(ImageView imageView, WifiData wifiData){
+        boolean containWPA = wifiData.getSecurity().contains("WPA");
+        boolean containWEP = wifiData.getSecurity().contains("WEP");
+        boolean containWPS = wifiData.getSecurity().contains("WPS");
+
+
+        // Assign icon depending on security
+        if(containWPA && !containWEP && !containWPS){
+            imageView.setImageResource(R.drawable.ic_ok_green);
+        }else if(containWPS && !containWEP){
+            imageView.setImageResource(R.drawable.ic_ok_yellow);
+        }
+        else if(containWEP){
+            imageView.setImageResource(R.drawable.ic_ok_red);
+        }else{
+            imageView.setImageResource(R.drawable.ic_question);
+        }
     }
 
 }
