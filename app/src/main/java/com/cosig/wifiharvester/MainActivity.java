@@ -1,9 +1,11 @@
 package com.cosig.wifiharvester;
 
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
 
 
 import android.support.v7.widget.Toolbar;
@@ -37,11 +39,20 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Ask permission for dangerous permission (See android's doc)
+        if(Build.VERSION.SDK_INT >= 23)
+        {
+            String[] perms = {"android.permission.ACCESS_FINE_LOCATION", "android.permission.WRITE_EXTERNAL_STORAGE"};
+            int permsRequestCode = 200;
+            requestPermissions(perms, permsRequestCode);
+        }
+
         debug = Debug.getDebug(this.getApplicationContext());
 
         initOnClickListener();  //Init Start Stop Info button
         initSwitchVib();
         initWifiList();
+
     }
 
     @Override
@@ -65,6 +76,35 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
+        boolean locationAccepted = false;
+        boolean storageAccepted = false;
+
+        switch(permsRequestCode){
+
+            case 200:
+
+                locationAccepted = grantResults[0]==PackageManager.PERMISSION_GRANTED;
+
+                storageAccepted = grantResults[1]==PackageManager.PERMISSION_GRANTED;
+
+                break;
+
+        }
+
+        if(!locationAccepted || !storageAccepted)
+        {
+            // Print error message
+            Popup popup = new Popup("The application will close, you did not accept all permission. SDK: " + Integer.toString(Build.VERSION.SDK_INT));
+            popup.show(getFragmentManager(),"");
+            //finish();
+            //System.exit(0);
+        }
+
+    }
+
 
     public void updateWifi(ArrayList<WifiData> wifiDataArrayList){
         // Verify if wifi is already there

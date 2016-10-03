@@ -67,20 +67,24 @@ public class WifiGpsHarvester {
     }
 
     public void stopWifiRecording(){
-        if(wifiLock != null) wifiLock.release();
+        if(wifiLock != null)
+        {
+            wifiLock.release();
+            continueScanning = false;
 
-        continueScanning = false;
+            try{
+                Thread.sleep(3000);
+            }catch (InterruptedException e){
+                Thread.interrupted();
+            }
 
-        try{
-            Thread.sleep(3000);
-        }catch (InterruptedException e){
-            Thread.interrupted();
+            this.dataJson += "]}";
+            writeToFile(this.dataJson);
+            wifiLock = null;
+
+            debug.log("WifiGpsHarvester","StopWifiRecording...");
         }
 
-        this.dataJson += "]}";
-        writeToFile(this.dataJson);
-
-        debug.log("WifiGpsHarvester","StopWifiRecording...");
 
     }
 
