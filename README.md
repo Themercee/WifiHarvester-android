@@ -8,7 +8,7 @@ The application is used to log the Wifi you get when you walk.
 
 1. Start the app and click on the info button (third one) to see if you get GPS position
 
-2. When GPS position is ok, walk around the building or place you want to log the Wifi signal
+2. When GPS position is ok, click on play (first button) and walk around the building or place you want to log the Wifi signal
 
 3. When finished, click on Stop (second button) to stop recording.
 
@@ -20,6 +20,5 @@ The application is used to log the Wifi you get when you walk.
 
 ## TODO
 - Change the play button icon when pressed
-- Add a scrolling list to see Wifi with their infos
 - Add some unit test
 - Add facultative DEBUG option
