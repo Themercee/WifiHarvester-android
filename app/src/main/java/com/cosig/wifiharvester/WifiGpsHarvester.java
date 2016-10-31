@@ -113,6 +113,18 @@ public class WifiGpsHarvester {
         mainActivity.updateWifi(wifiDataArrayList);
     }
 
+    public void setContinueScanning(boolean action){
+        this.continueScanning = action;
+    }
+
+    public boolean getContinueScanning(){
+        return this.continueScanning;
+    }
+
+    /*********************
+     * GPS SECTION
+     ********************/
+
     public void updateLatLon(Position position){
         mainActivity.updateLatLon(Double.toString(position.lat),Double.toString(position.lon));
     }
@@ -134,25 +146,6 @@ public class WifiGpsHarvester {
             debug.log("WifiGpsHarvester", "In getGPSRecording...add coord: " + Double.toString(result.lat) + ", " + Double.toString(result.lon));
         }
         return result;
-    }
-
-    public void Debug(){
-        LocationService locationService = LocationService.getLocationManager(context, this);
-        Popup unpop = new Popup(locationService.getDebugInfo());
-        unpop.show(fragMan,"NoTag");
-    }
-
-    private void writeToFile(String data) {
-        try {
-            FileWriter fw = new FileWriter(Environment.getExternalStorageDirectory() + "/dataSaved.json", true);
-            fw.write(data);
-            fw.flush();
-            fw.close();
-        }
-        catch (IOException e) {
-            Popup unpop = new Popup("Error!: " + e.toString());
-            unpop.show(fragMan,"NoTag");
-        }
     }
 
     public void updateGPSState(int state){
@@ -181,12 +174,29 @@ public class WifiGpsHarvester {
         mainActivity.updateLatLon(Double.toString(lat),Double.toString(lon));
     }
 
-    public void setContinueScanning(boolean action){
-        this.continueScanning = action;
+    /********************
+     * UTILITY SECTION
+     *******************/
+
+    public void Debug(){
+        LocationService locationService = LocationService.getLocationManager(context, this);
+        Popup unpop = new Popup(locationService.getDebugInfo());
+        unpop.show(fragMan,"NoTag");
     }
 
-    public boolean getContinueScanning(){
-        return this.continueScanning;
+    private void writeToFile(String data) {
+        try {
+            FileWriter fw = new FileWriter(Environment.getExternalStorageDirectory() + "/dataSaved.json", true);
+            fw.write(data);
+            fw.flush();
+            fw.close();
+        }
+        catch (IOException e) {
+            Popup unpop = new Popup("Error!: " + e.toString());
+            unpop.show(fragMan,"NoTag");
+        }
     }
+
+
 
 }
