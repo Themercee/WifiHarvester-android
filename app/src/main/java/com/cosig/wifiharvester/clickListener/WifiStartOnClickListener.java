@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 
+import com.cosig.wifiharvester.R;
 import com.cosig.wifiharvester.WifiGpsHarvester;
 
 /**
@@ -22,7 +23,7 @@ public class WifiStartOnClickListener implements View.OnClickListener {
         //turn on the indicator
         FloatingActionButton startButton = (FloatingActionButton) v;
         startButton.setRippleColor(Color.WHITE);
-        startButton.setImageResource(android.support.design.R.drawable.abc_ic_search_api_mtrl_alpha);
+        startButton.setImageResource(R.drawable.ic_loupe);
         this.wgh.startWifiRecording();
     }
 }

@@ -1,8 +1,12 @@
 package com.cosig.wifiharvester;
 
 
+import android.content.IntentSender;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.content.pm.PackageManager;
@@ -18,19 +22,40 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 
 import com.cosig.wifiharvester.clickListener.WifiInfoOnClickListener;
 import com.cosig.wifiharvester.clickListener.WifiStartOnClickListener;
 import com.cosig.wifiharvester.clickListener.WifiStopOnClickListener;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
     private Debug debug;
     private ArrayList<WifiData> wifiArray;
     private ArrayAdapterWifi adapterListWifi;
+
+    private GoogleApiClient mGoogleApiClient;
+    private Location mCurrentLocation;
+    private LocationRequest mLocationRequest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
         initOnClickListener();  //Init Start Stop Info button
         initSwitchVib();
         initWifiList();
+
+        // Create an instance of GoogleAPIClient.
+        buildGoogleApiClient();
 
     }
 
@@ -104,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
 
     public void updateWifi(ArrayList<WifiData> wifiDataArrayList){
         // Verify if wifi is already there
@@ -206,5 +233,88 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /******************
+    * GOOGLE PLAY API
+    * ****************/
+    public synchronized void buildGoogleApiClient(){
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            createLocationRequest();
+            onStart();
+        }
+    }
 
+    public void startLocationUpdates(){
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    protected void onStart() {
+        debug.log("MainActivity", "In method onStart...");
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        debug.log("MainActivity", "In method onStop...");
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        String message = "FAILED TO CONNECT TO GOOGLE PLAY SERVICE: " + connectionResult.getErrorMessage() + " Error Code: " + Integer.toString(connectionResult.getErrorCode()) ;
+        debug.log("MainActivity", message);
+        Popup popup = new Popup(message);
+        popup.show(getFragmentManager(),"");
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (mCurrentLocation == null) {
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+
+        double lat = mCurrentLocation.getLatitude();
+        double lon = mCurrentLocation.getLongitude();
+
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        debug.log("MainActivity","Connection suspended. Code: " + Integer.toString(i));
+    }
+
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(7000);
+        mLocationRequest.setFastestInterval(3000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    public Position getGPlayServicePosition(){
+        Double lat = mCurrentLocation.getLatitude();
+        Double lon = mCurrentLocation.getLongitude();
+        Position position = new Position(lat,lon);
+        return position;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mCurrentLocation = location;
+        String lat = Double.toString(location.getLatitude());
+        String lon = Double.toString(location.getLongitude());
+
+        updateLatLon(lat,lon);
+        debug.log("MainActivity","Location changed. Lat: " + lat + " Lon: " + lon);
+    }
 }

@@ -125,23 +125,29 @@ public class WifiGpsHarvester {
      * GPS SECTION
      ********************/
 
-    public void updateLatLon(Position position){
-        mainActivity.updateLatLon(Double.toString(position.lat),Double.toString(position.lon));
-    }
-
     public void addNewGpsCoord(double lat, double lon){
         this.newGpsUpdate = true;
-        updateLatLon(lat,lon);
+        updateLatLonForUI(lat,lon);
+    }
+
+    public void updateLatLonForUI(Position position){
+        if(position.lat != 0 && position.lon != 0){
+            mainActivity.updateLatLon(Double.toString(position.lat),Double.toString(position.lon));
+        }
+    }
+
+    public void updateLatLonForUI(double lat, double lon){
+        if(lat != 0 && lon != 0){
+            mainActivity.updateLatLon(Double.toString(lat),Double.toString(lon));
+        }
     }
 
     public Position getGPSRecording(){
         debug.log("WifiGpsHarvester", "In getGPSRecording");
-        LocationService locationService = LocationService.getLocationManager(context, this);
         Position result = new Position(0.0,0.0);
 
         if(this.newGpsUpdate){
-            result.lat = locationService.latitude;
-            result.lon = locationService.longitude;
+            result = mainActivity.getGPlayServicePosition();
             this.newGpsUpdate = false;
             debug.log("WifiGpsHarvester", "In getGPSRecording...add coord: " + Double.toString(result.lat) + ", " + Double.toString(result.lon));
         }
@@ -166,13 +172,8 @@ public class WifiGpsHarvester {
         mainActivity.updateGpsProvider(provider);
     }
 
-    public void updateLatLon(double lat, double lon){
-        if(lat == 0 || lon == 0){
-            debug.vibrate();
-        }
 
-        mainActivity.updateLatLon(Double.toString(lat),Double.toString(lon));
-    }
+
 
     /********************
      * UTILITY SECTION

@@ -65,7 +65,7 @@ public class ScanWifiAsync  extends AsyncTask<String,WifiGPSAsyncContainer, Inte
 
         //Update position
         if(position.lat != -1 && position.lon != -1){
-            wgh.updateLatLon(position);
+            wgh.updateLatLonForUI(position);
         }
     }
 }
